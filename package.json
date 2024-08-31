@@ -6,11 +6,15 @@
   },
   "main": "index.js",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hgaleh/split"
+  },
   "dependencies": {
     "cli-progress": "^3.12.0",
     "fluent-ffmpeg": "^2.1.3",
     "rxjs": "^7.8.1",
     "srt-parser-2": "^1.2.3",
-    "yargs": "latest"
+    "yargs": "^17.7.2"
   }
 }
