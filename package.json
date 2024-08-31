@@ -1,0 +1,18 @@
+{
+  "name": "@galeh/split",
+  "version": "1.0.0",
+  "bin": {
+    "split": "./index.js"
+  },
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "cli-progress": "^3.12.0",
+    "fluent-ffmpeg": "^2.1.3",
+    "rxjs": "^7.8.1",
+    "srt-parser-2": "^1.2.3",
+    "subtitle": "^4.2.1",
+    "tmp": "^0.2.3",
+    "yargs": "latest"
+  }
+}
