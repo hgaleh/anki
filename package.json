@@ -1,6 +1,6 @@
 {
   "name": "@galeh/split",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "bin": {
     "split": "./index.js"
   },
@@ -14,6 +14,7 @@
     "access": "public"
   },
   "keywords": [
+    "anki",
     "subtitle",
     "video",
     "split",
