@@ -1,6 +1,6 @@
 ```bash
 split <input> <srt>
-```
+
 Split the input file(video or sound) using the given srt file
 
 Positionals:
@@ -16,3 +16,5 @@ Options:
   -m, --margin   By default the input file is splitted 0.1s before subtitle
                  starts and ends, you can change this time by specifying the
                  margin. The unit is second              [number] [default: 0.1]
+
+```
