@@ -1,6 +1,6 @@
 {
   "name": "@galeh/split",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "bin": {
     "split": "./index.js"
   },
@@ -9,6 +9,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/hgaleh/split"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "dependencies": {
     "cli-progress": "^3.12.0",

@@ -7,7 +7,7 @@ const path = require('path');
 yargs(hideBin(process.argv))
     .command(
         '$0 <input> <srt>',
-        'Split the input file using the given srt file',
+        'Split the input file(video or sound) using the given srt file',
         (yargs) => {
         yargs
             .positional('input', {
