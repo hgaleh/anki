@@ -2,8 +2,16 @@
 A cli tool that helps splitting the vide and mp3 files according to their subtitle. For example you give it a mp3 file name and its subtitle (in the format of srt), it splits the mp3 file from the start to end of each subtitle part. It can be helpful for those who have language learning materials and need to create flashcards for them.
 
 The outputted voices and videos can be easily matched with their subtitle counterpart to create flashcards in programs like Anki
- 
-### How it works
+
+### Installation
+You should have ffmpeg installed and be available in PATH, also install nodejs and type the following command to install this package globally:
+```bash
+npm install -g @galeh/split
+```
+
+### How to use
+This is so easy to use it, just take a look at the help output:
+
 ```bash
 split <input> <srt>
 
