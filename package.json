@@ -1,6 +1,6 @@
 {
   "name": "@galeh/split",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "bin": {
     "split": "./index.js"
   },
@@ -13,6 +13,12 @@
   "publishConfig": {
     "access": "public"
   },
+  "keywords": [
+    "subtitle",
+    "video",
+    "split",
+    "language learning"
+  ],
   "dependencies": {
     "cli-progress": "^3.12.0",
     "fluent-ffmpeg": "^2.1.3",
