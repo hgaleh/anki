@@ -1,6 +1,6 @@
 {
   "name": "@galeh/split",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "bin": {
     "split": "./index.js"
   },
