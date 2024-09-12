@@ -2,7 +2,6 @@
 const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
 const { main } = require('./lib/main');
-const path = require('path');
 
 yargs(hideBin(process.argv))
     .command(
@@ -40,9 +39,14 @@ yargs(hideBin(process.argv))
                 type: 'number',
                 default: 10,
                 description: 'Maximum concurrent output files to be created'
+            }).
+            options('anki', {
+                alias: 'a',
+                type: 'string',
+                description: 'Anki deck name'
             });
         },
-        async ({ input, srt, output, convert, margin, concurrent }) => {
+        async ({ input, srt, output, convert, margin, concurrent, anki }) => {
             await main({
                 inputFile: input,
                 srtFile: srt,
@@ -50,7 +54,8 @@ yargs(hideBin(process.argv))
                 convert,
                 currentDir: process.cwd(),
                 margin,
-                concurrent
+                concurrent,
+                anki
             });
         }
     )
