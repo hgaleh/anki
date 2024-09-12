@@ -35,16 +35,22 @@ yargs(hideBin(process.argv))
                 type: 'number',
                 default: 0.1,
                 description: 'By default the input file is splitted 0.1s before subtitle starts and ends, you can change this time by specifying the margin. The unit is second'
+            })
+            .options('concurrent', {
+                type: 'number',
+                default: 10,
+                description: 'Maximum concurrent output files to be created'
             });
         },
-        async ({ input, srt, output, convert, margin }) => {
+        async ({ input, srt, output, convert, margin, concurrent }) => {
             await main({
                 inputFile: input,
                 srtFile: srt,
                 outputDir: output,
                 convert,
                 currentDir: process.cwd(),
-                margin
+                margin,
+                concurrent
             });
         }
     )
