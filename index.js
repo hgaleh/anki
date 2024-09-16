@@ -6,7 +6,7 @@ const { main } = require('./lib/main');
 yargs(hideBin(process.argv))
     .command(
         '$0 <input> <srt>',
-        'Split the input file(video or sound) using the given srt file',
+        'Split the input file(video) from silent intervals and creates anki decks using subtitle file and the provided video file',
         (yargs) => {
         yargs
             .positional('input', {
@@ -29,33 +29,26 @@ yargs(hideBin(process.argv))
                 default: false,
                 description: 'Converts the input file to mp3 before splitting'
             })
-            .option('margin', {
-                alias: 'm',
-                type: 'number',
-                default: 0.1,
-                description: 'By default the input file is splitted 0.1s before subtitle starts and ends, you can change this time by specifying the margin. The unit is second'
-            })
             .options('concurrent', {
                 type: 'number',
                 default: 10,
                 description: 'Maximum concurrent output files to be created'
             }).
-            options('anki', {
-                alias: 'a',
+            options('deck', {
+                alias: 'd',
                 type: 'string',
-                description: 'Anki deck name'
+                description: 'Anki deck name, default is the input file name'
             });
         },
-        async ({ input, srt, output, convert, margin, concurrent, anki }) => {
+        async ({ input, srt, output, convert, concurrent, deck }) => {
             await main({
                 inputFile: input,
                 srtFile: srt,
                 outputDir: output,
                 convert,
                 currentDir: process.cwd(),
-                margin,
                 concurrent,
-                anki
+                deck
             });
         }
     )
