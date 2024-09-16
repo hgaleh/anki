@@ -1,5 +1,5 @@
 {
-  "name": "@galeh/split",
+  "name": "@galeh/anki",
   "version": "3.0.0",
   "bin": {
     "anki": "./index.js"
@@ -8,7 +8,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/hgaleh/split"
+    "url": "https://github.com/hgaleh/anki"
   },
   "publishConfig": {
     "access": "public"
@@ -17,6 +17,7 @@
     "anki",
     "subtitle",
     "video",
+    "film",
     "split",
     "language learning"
   ],
