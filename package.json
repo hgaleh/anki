@@ -1,6 +1,6 @@
 {
   "name": "@galeh/anki",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "bin": {
     "anki": "./index.js"
   },
@@ -19,12 +19,20 @@
     "video",
     "film",
     "split",
-    "language learning"
+    "language learning",
+    "flashcard",
+    "english"
+  ],
+  "contributors": [
+    {
+      "name": "Dario Galeh (Hojjatollah Bakhtiyari Kiya)",
+      "email": "dariogaleh@outlook.com",
+      "url": "https://www.linkedin.com/in/dario-galeh/"
+    }
   ],
   "dependencies": {
     "anki-apkg-export": "^4.0.3",
     "cli-progress": "^3.12.0",
-    "fluent-ffmpeg": "^2.1.3",
     "rxjs": "^7.8.1",
     "srt-parser-2": "^1.2.3",
     "yargs": "^17.7.2"
