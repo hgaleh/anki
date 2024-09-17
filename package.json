@@ -1,6 +1,6 @@
 {
   "name": "@galeh/anki",
-  "version": "3.3.1",
+  "version": "3.3.2",
   "bin": {
     "anki": "./index.js"
   },

@@ -40,7 +40,6 @@ yargs(hideBin(process.argv))
                 inputFile: input,
                 srtFileList: srt,
                 convert,
-                currentDir: process.cwd(),
                 concurrent,
                 deck
             });
