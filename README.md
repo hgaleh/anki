@@ -11,17 +11,17 @@ npm install -g @galeh/anki
 This is so easy to use, just take a look at the help output:
 
 ```bash
-anki <input> <srt>
+anki <input>
 
 Create anki decks using a video and its subtitle
 
 Positionals:
   input  The input file path                                            [string]
-  srt    The SRT file                                                   [string]
 
 Options:
       --version     Show version number                                [boolean]
       --help        Show help                                          [boolean]
+      --srt         The SRT file(s)                                      [array]
   -c, --convert     Converts the input file to mp3 before splitting
                                                       [boolean] [default: false]
       --concurrent  Maximum concurrent output files to be created

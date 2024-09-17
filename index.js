@@ -5,7 +5,7 @@ const { main } = require('./lib/main');
 
 yargs(hideBin(process.argv))
     .command(
-        '$0 <input> <srt>',
+        '$0 <input>',
         'Create anki decks using a video and its subtitle',
         (yargs) => {
             yargs
@@ -13,9 +13,9 @@ yargs(hideBin(process.argv))
                     describe: 'The input file path',
                     type: 'string',
                 })
-                .positional('srt', {
-                    describe: 'The SRT file',
-                    type: 'string',
+                .option('srt', {
+                    describe: 'The SRT file(s)',
+                    type: 'array',
                 })
                 .option('convert', {
                     alias: 'c',
@@ -37,7 +37,7 @@ yargs(hideBin(process.argv))
         async ({ input, srt, convert, concurrent, deck }) => {
             await main({
                 inputFile: input,
-                srtFile: srt,
+                srtFileList: srt,
                 convert,
                 currentDir: process.cwd(),
                 concurrent,
