@@ -10,6 +10,13 @@ npm install -g @galeh/anki
 ### How to use
 This is so easy to use, just take a look at the help output:
 
+### Example usage
+```bash
+anki video.mp4 --srt video.srt
+anki video.mp4 --srt subtitle1.srt subtitle2.srt
+```
+
+### Help command output
 ```bash
 anki <input>
 
