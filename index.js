@@ -17,6 +17,7 @@ yargs(hideBin(process.argv))
                 .option('srt', {
                     describe: 'The SRT file(s)',
                     type: 'array',
+                    default: []
                 })
                 .option('convert', {
                     alias: 'c',
