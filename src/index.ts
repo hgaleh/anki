@@ -36,12 +36,12 @@ yargs(hideBin(process.argv))
                 });
         },
         async ({ input, srt, concurrent, deck }) => {
-            await main({
-                inputFile: input,
-                srtFileList: srt,
+            await main(
+                input,
+                srt,
                 concurrent,
                 deck
-            });
+            );
         }
     )
     .help()

@@ -13,17 +13,12 @@ import { Subtitle } from './type/subtitle';
 import { SubtitleBlock } from './type/subtitle-block';
 import { CardMeta } from './type/card-meta';
 
-export async function main({
-    inputFile,
-    srtFileList,
-    concurrent,
-    deck
-}: {
+export async function main(
     inputFile: string,
     srtFileList: string[],
     concurrent: number,
     deck: string
-}) {
+) {
     const deckName = deck ? deck : path.basename(inputFile).split('.').shift();
     const sanitisedDeckName = fullSanitize(deckName);
     const prefixedInputFile = path.resolve(inputFile);
