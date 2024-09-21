@@ -2,9 +2,9 @@ import fs from 'fs';
 import path from 'path';
 import os from 'os';
 
-export async function outputFileNameCalculate(fileCount: number, shouldConvert: boolean) {
+export async function outputFileNameCalculate(fileCount: number) {
     const prefix = await getPrefix();
-    const suffix = shouldConvert ? 'mp3' : 'mp4';
+    const suffix = 'mp4';
     const fileNameLen = (''+fileCount).length;
 
     function getFileName(index: number) {

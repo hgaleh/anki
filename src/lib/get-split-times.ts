@@ -45,7 +45,7 @@ export function getSplitTimes(inputFile: string) {
         ffmpeg.on('close', (code) => {
             if (code === 0) {
                 const fileDuration = timeToSeconds(durationMatch[1]);
-                resolve(getSplits(silentPeriods, fileDuration, 0.5));
+                resolve(getSplits(silentPeriods, fileDuration));
             } else {
                 reject(`ffmpeg exited with code ${code}`);
             }
@@ -54,19 +54,13 @@ export function getSplitTimes(inputFile: string) {
 }
 
 
-function getSplits(silences: Partial<SubtitleBlock>[], duration: number, maxSilenceDuration: number): SubtitleBlock[] {
+function getSplits(silences: Partial<SubtitleBlock>[], duration: number): SubtitleBlock[] {
     if (!silences || !silences.length) {
         return [];
     }
 
     const modifiedSilences = silences.map(({start, end}) => {
-        const gap = end - start;
-
-        if (gap > (2 * maxSilenceDuration)) {
-            return buildBlock(start + maxSilenceDuration, end - maxSilenceDuration)
-        } else {
-            return buildBlock((start + end) / 2, (start + end) / 2)
-        }
+        return buildBlock((start + end) / 2, (start + end) / 2)
     });
 
     const nonSilentPoints: SubtitleBlock[] = [];

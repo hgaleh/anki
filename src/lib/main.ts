@@ -12,18 +12,15 @@ import { reduceTime } from './reduce-time';
 import { Subtitle } from './type/subtitle';
 import { SubtitleBlock } from './type/subtitle-block';
 import { CardMeta } from './type/card-meta';
-import chalk from 'chalk';
 
 export async function main({
     inputFile,
     srtFileList,
-    convert,
     concurrent,
     deck
 }: {
     inputFile: string,
     srtFileList: string[],
-    convert: boolean,
     concurrent: number,
     deck: string
 }) {
@@ -41,9 +38,9 @@ export async function main({
         return extractTextFromSubtitle(prev, curr);
     }, await getSplitTimes(prefixedInputFile));
 
-    const reducedTimeAndTextx = reduceTime(timesAndTexts);
+    const reducedTimeAndTextx = srtFileList.length > 0 ? reduceTime(timesAndTexts) : timesAndTexts;
 
-    const { prefix, getFileName, getPrefixedFileName } = await outputFileNameCalculate(reducedTimeAndTextx.length, convert);
+    const { prefix, getFileName, getPrefixedFileName } = await outputFileNameCalculate(reducedTimeAndTextx.length);
 
     console.log("Creating splitted files...");
     console.log(`Temporary directory: ${prefix}`);
@@ -63,7 +60,7 @@ export async function main({
         const prefixedSplitFileName = getPrefixedFileName(indx);
 
         return {
-            job: splitAudio(prefixedInputFile, time.start, time.end, prefixedSplitFileName, convert),
+            job: splitAudio(prefixedInputFile, time.start, time.end, prefixedSplitFileName),
             card: { text: time.text, media: prefixedSplitFileName, fileName: splitFileName }
         }
     });
@@ -91,7 +88,7 @@ export async function main({
             bar1.terminate();
             console.log();
             createAnki(sanitisedDeckName, cardData).then(() => {
-                console.log(`${sanitisedDeckName} created!`);
+                console.log(`${green}${sanitisedDeckName} created!${reset}`);
             }).catch(e => {
                 console.error("Error in creation of anki deck.");
                 console.error(e);

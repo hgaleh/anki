@@ -5,7 +5,6 @@ import { main } from './lib/main';
 interface ArgType {
     input: string;
     srt: string[];
-    convert: boolean;
     concurrent: number;
     deck: string;
 }
@@ -25,12 +24,6 @@ yargs(hideBin(process.argv))
                     type: 'array',
                     default: []
                 })
-                .option('convert', {
-                    alias: 'c',
-                    type: 'boolean',
-                    default: false,
-                    description: 'Converts the input file to mp3 before splitting'
-                })
                 .options('concurrent', {
                     type: 'number',
                     default: 10,
@@ -42,11 +35,10 @@ yargs(hideBin(process.argv))
                     description: 'Anki deck name, default is the input file name'
                 });
         },
-        async ({ input, srt, convert, concurrent, deck }) => {
+        async ({ input, srt, concurrent, deck }) => {
             await main({
                 inputFile: input,
                 srtFileList: srt,
-                convert,
                 concurrent,
                 deck
             });

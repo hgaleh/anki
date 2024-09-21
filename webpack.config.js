@@ -7,7 +7,8 @@ const { MakeExecutablePlugin } = require('./plugin/make-executable-plugin');
 
 const config = {
     entry: './src/index.ts',
-    target: 'node',
+    target: 'node14',
+    externalsPresets: { node: true },
     output: {
         filename: 'index.js',
         path: path.resolve(__dirname, 'dist'),
@@ -32,7 +33,13 @@ const config = {
     resolve: {
         extensions: ['.ts', '.js'],
     },
-    externals: [nodeExternals()],
+    externals: [
+        nodeExternals({
+            importType: function(moduleName) {
+                return moduleName === 'srt-parser-2' ? `module srt-parser-2` : `commonjs ${moduleName}`
+            }
+        })
+    ],
     plugins: [
         new webpack.BannerPlugin({
             banner: '#!/usr/bin/env node',
