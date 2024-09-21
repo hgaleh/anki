@@ -1,10 +1,11 @@
-const { spawn } = require('child_process');
-const { timeToSeconds } = require('./time-to-seconds');
+import { spawn } from 'child_process';
+import { timeToSeconds } from './time-to-seconds';
+import { SubtitleBlock } from './type/subtitle-block';
 
-exports.getSplitTimes = function (inputFile) {
-    return new Promise((resolve, reject) => {
-        const silentPeriods = [];
-        let durationMatch;
+export function getSplitTimes(inputFile: string) {
+    return new Promise<SubtitleBlock[]>((resolve, reject) => {
+        const silentPeriods: Partial<SubtitleBlock>[] = [];
+        let durationMatch: any;
 
         const ffmpeg = spawn('ffmpeg', [
             '-i', inputFile,
@@ -20,7 +21,7 @@ exports.getSplitTimes = function (inputFile) {
             const silenceEndRegex = /silence_end: ([0-9.]+)/;
             durationMatch = output.match(/Duration: (\d{2}:\d{2}:\d{2}\.\d{2})/) || durationMatch;
 
-            output.split('\n').forEach(line => {
+            output.split('\n').forEach((line: string) => {
                 const silenceStartMatch = silenceStartRegex.exec(line);
                 const silenceEndMatch = silenceEndRegex.exec(line);
 
@@ -53,7 +54,7 @@ exports.getSplitTimes = function (inputFile) {
 }
 
 
-function getSplits(silences, duration, maxSilenceDuration) {
+function getSplits(silences: Partial<SubtitleBlock>[], duration: number, maxSilenceDuration: number): SubtitleBlock[] {
     if (!silences || !silences.length) {
         return [];
     }
@@ -68,7 +69,7 @@ function getSplits(silences, duration, maxSilenceDuration) {
         }
     });
 
-    const nonSilentPoints = [];
+    const nonSilentPoints: SubtitleBlock[] = [];
 
     for (let i = 0; i < modifiedSilences.length - 1; i++) {
         nonSilentPoints.push(buildBlock(modifiedSilences[i].end, modifiedSilences[i + 1].start));
@@ -85,7 +86,7 @@ function getSplits(silences, duration, maxSilenceDuration) {
     return nonSilentPoints;
 }
 
-function buildBlock(start, end) {
+function buildBlock(start: number, end: number): SubtitleBlock {
     if((start === undefined) && (end === undefined)) {
         throw "start and end are required";
     }

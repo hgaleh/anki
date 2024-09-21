@@ -1,4 +1,4 @@
-exports.timeToSeconds = function(time) {
+export function timeToSeconds(time: string) {
     const parts = time.split(':');
     const secondsParts = parts[2].includes(',') ? parts[2].split(',') : parts[2].split('.');
     

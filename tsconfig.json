@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "nodenext",
+    "noImplicitAny": true,
+    "module": "nodenext",
+    "target": "es2020",
+    "allowJs": false,
+    "esModuleInterop": true,
+    "sourceMap": true
+  },
+  "files": ["src/index.ts"],
+  "include": [
+    "./src/lib/type/sql.d.ts"
+  ]
+}

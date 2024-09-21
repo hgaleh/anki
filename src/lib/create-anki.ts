@@ -1,11 +1,12 @@
-const { AnkiExporter } = require('./anki-exporter');
-const path = require('path');
+import { AnkiExporter } from './anki-exporter';
+import path from 'path';
+import { CardMeta } from './type/card-meta';
 
-exports.createAnki = function(deckName, cardData) {
+export function createAnki(deckName: string, cardData: CardMeta[]) {
   const randomNumber = Math.random();
   const prefix = `${deckName}-${randomNumber}`
-  return new Promise((res, rej) => {
-    const apkg = new AnkiExporter(deckName);
+  return new Promise<void>((res, rej) => {
+    const apkg = AnkiExporter(deckName);
    
     cardData.forEach(card => {
       const mediaAddress = `${prefix}-${card.fileName}`;

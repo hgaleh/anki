@@ -1,11 +1,17 @@
-#!/usr/bin/env node
+import yargs from 'yargs';
+import { hideBin } from 'yargs/helpers';
+import { main } from './lib/main';
 
-const yargs = require('yargs/yargs');
-const { hideBin } = require('yargs/helpers');
-const { main } = require('./lib/main');
+interface ArgType {
+    input: string;
+    srt: string[];
+    convert: boolean;
+    concurrent: number;
+    deck: string;
+}
 
 yargs(hideBin(process.argv))
-    .command(
+    .command<ArgType>(
         '$0 <input>',
         'Create anki decks using a video and its subtitle',
         (yargs) => {

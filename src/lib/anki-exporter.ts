@@ -1,12 +1,19 @@
-const sha1 = require('sha1');
-const archiver = require('archiver');
-const createTemplate = require('./template');
-const sql = require('sql.js/js/sql-memory-growth');
-const fs = require('fs');
+import sha1 from 'sha1';
+import archiver from 'archiver';
+import { createTemplate } from './template';
+import sql from 'sql.js/js/sql-memory-growth';
+import fs from 'fs';
 
 class Exporter {
+  private db: sql.Database;
+  private deckName;
+  private zip;
+  private media: any[];
+  private topDeckId: number;
+  private topModelId;
+  private separator;
 
-  constructor(deckName, { template, sql }) {
+  constructor(deckName: string, { template, sql }: any) {
     this.db = new sql.Database();
     this.db.run(template);
 
@@ -40,8 +47,8 @@ class Exporter {
     this._update('update col set models=:models where id=1', { ':models': JSON.stringify(models) });
   }
 
-  save(path) {
-    return new Promise((res, rej) => {
+  save(path: string) {
+    return new Promise<void>((res, rej) => {
       const output = fs.createWriteStream(path);
       this.zip.on('close', function() {
         res();
@@ -58,7 +65,7 @@ class Exporter {
         return prev;
       }, {});
   
-      this.zip.append(new Buffer.from(binaryArray), { name: 'collection.anki2' });
+      this.zip.append(Buffer.from(binaryArray), { name: 'collection.anki2' });
       this.zip.append(JSON.stringify(mediaObj), { name: 'media'});
   
       this.media.forEach((item, i) => this.zip.file(item.filePath, { name: `${i}` }));
@@ -69,11 +76,11 @@ class Exporter {
 
   }
 
-  addMedia(filename, filePath) {
+  addMedia(filename: string, filePath: string) {
     this.media.push({ filename, filePath });
   }
 
-  addCard(front, back, { tags } = {}) {
+  addCard(front: string, back: string, { tags }: { tags?: string[]} = { tags: undefined}) {
     const { topDeckId, topModelId, separator } = this;
     const now = Date.now();
     const note_guid = this._getNoteGuid(topDeckId, front, back);
@@ -125,46 +132,46 @@ class Exporter {
     );
   }
 
-  _update(query, obj) {
+  _update(query: string, obj: any) {
     this.db.prepare(query).getAsObject(obj);
   }
 
-  _getInitialRowValue(table, column = 'id') {
+  _getInitialRowValue(table: string, column = 'id') {
     const query = `select ${column} from ${table}`;
     return this._getFirstVal(query);
   }
 
-  _checksum(str) {
+  _checksum(str: string) {
     return parseInt(sha1(str).substr(0, 8), 16);
   }
 
-  _getFirstVal(query) {
-    return JSON.parse(this.db.exec(query)[0].values[0]);
+  _getFirstVal(query: string) {
+    return JSON.parse(this.db.exec(query)[0].values[0] as any);
   }
 
-  _tagsToStr(tags = []) {
+  _tagsToStr(tags: string[] = []) {
     return ' ' + tags.map(tag => tag.replace(/ /g, '_')).join(' ') + ' ';
   }
 
-  _getId(table, col, ts) {
+  _getId(table: string, col: string, ts: number) {
     const query = `SELECT ${col} from ${table} WHERE ${col} >= :ts ORDER BY ${col} DESC LIMIT 1`;
     const rowObj = this.db.prepare(query).getAsObject({ ':ts': ts });
 
     return rowObj[col] ? +rowObj[col] + 1 : ts;
   }
 
-  _getNoteId(guid, ts) {
+  _getNoteId(guid: string, ts: number) {
     const query = `SELECT id from notes WHERE guid = :guid ORDER BY id DESC LIMIT 1`;
     const rowObj = this.db.prepare(query).getAsObject({ ':guid': guid });
 
     return rowObj.id || this._getId('notes', 'id', ts);
   }
 
-  _getNoteGuid(topDeckId, front, back) {
+  _getNoteGuid(topDeckId: number, front: string, back: string) {
     return sha1(`${topDeckId}${front}${back}`);
   }
 
-  _getCardId(note_id, ts) {
+  _getCardId(note_id: any, ts: number): any {
     const query = `SELECT id from cards WHERE nid = :note_id ORDER BY id DESC LIMIT 1`;
     const rowObj = this.db.prepare(query).getAsObject({ ':note_id': note_id });
 
@@ -172,7 +179,7 @@ class Exporter {
   }
 }
 
-function getLastItem(obj) {
+function getLastItem(obj: any) {
   const keys = Object.keys(obj);
   const lastKey = keys[keys.length - 1];
 
@@ -182,7 +189,7 @@ function getLastItem(obj) {
   return item;
 };
 
-exports.AnkiExporter = function (deckName, template) {
+export function AnkiExporter(deckName: string, template?: any) {
   return new Exporter(deckName, {
     template: createTemplate(template),
     sql

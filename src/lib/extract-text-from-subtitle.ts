@@ -1,6 +1,8 @@
-const { timeToSeconds } = require("./time-to-seconds");
+import { timeToSeconds } from './time-to-seconds';
+import { Subtitle } from './type/subtitle';
+import { SubtitleBlock } from './type/subtitle-block';
 
-exports.extractTextFromSubtitle = function(splitTimes, subtitleBlocks) {
+export function extractTextFromSubtitle(splitTimes: SubtitleBlock[], subtitleBlocks: Subtitle[]) {
     const subtitleWithConvertedTimes = subtitleBlocks.map(subBlock => {
         return {
             start: timeToSeconds(subBlock.startTime),

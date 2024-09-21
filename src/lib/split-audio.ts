@@ -1,11 +1,11 @@
 
-const { Observable } = require('rxjs');
-const { spawn } = require('child_process');
+import { Observable } from 'rxjs';
+import { spawn } from 'child_process';
 
-exports.splitAudio = function(inputFile, startTime, endTime, outputFile, isConvert) {
+export function splitAudio(inputFile: string, startTime: number, endTime: number, outputFile: string, isConvert: boolean) {
     const duration = endTime - startTime;
 
-    return new Observable((subscriber) => {
+    return new Observable<string>((subscriber) => {
         const cmdFfmpeg = isConvert ? spawn('ffmpeg', [
             '-i',
             inputFile,
@@ -35,7 +35,7 @@ exports.splitAudio = function(inputFile, startTime, endTime, outputFile, isConve
             '-b:a',
             '128k',
             outputFile
-        ]); // ffmpeg -i 05.mp4 -c:v libx264 -c:a aac -b:a 128k 05-out.mp4
+        ]);
 
         cmdFfmpeg.on('close', (code) => {
             if (code === 0) {
