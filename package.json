@@ -1,9 +1,6 @@
 {
   "name": "@galeh/anki",
   "version": "4.0.0",
-  "bin": {
-    "anki": "./index.js"
-  },
   "license": "MIT",
   "repository": {
     "type": "git",

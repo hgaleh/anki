@@ -45,7 +45,11 @@ const config = {
             banner: '#!/usr/bin/env node',
             raw: true,
         }),
-        new GeneratePackageJsonPlugin({}),
+        new GeneratePackageJsonPlugin({
+            bin: {
+                anki: "index.js"
+            },
+        }),
         new MakeExecutablePlugin('index.js')
     ]
 };
