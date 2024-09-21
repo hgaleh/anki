@@ -65,4 +65,23 @@ describe('reduce time function', () => {
             text: ['some text']
         });
     });
+
+    it('two equal subtitles with empty text', () => {
+        const subtitleBlockList: SubtitleBlock[] = [{
+            start: 1,
+            end: 2,
+            text: []
+        }, {
+            start: 3,
+            end: 4,
+            text: []
+        }];
+        const res = reduceTime(subtitleBlockList);
+        expect(res.length === 1);
+        expect(res[0]).toEqual({
+            start: 1,
+            end: 4,
+            text: []
+        });
+    })
 })
