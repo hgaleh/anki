@@ -3,7 +3,7 @@ import path from 'path';
 import { CardMeta } from './type/card-meta';
 
 export function createAnki(deckName: string, cardData: CardMeta[]) {
-  const randomNumber = Math.random();
+  const randomNumber = Math.random().toString().split('.')[1];
   const prefix = `${deckName}-${randomNumber}`
   return new Promise<void>((res, rej) => {
     const apkg = AnkiExporter(deckName);

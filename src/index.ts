@@ -26,7 +26,7 @@ yargs(hideBin(process.argv))
                 })
                 .options('concurrent', {
                     type: 'number',
-                    default: 10,
+                    default: 1,
                     description: 'Maximum concurrent output files to be created'
                 }).
                 options('deck', {

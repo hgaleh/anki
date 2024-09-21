@@ -22,7 +22,7 @@ export async function outputFileNameCalculate(fileCount: number) {
 
 function getPrefix(): Promise<string> {
     return new Promise<string>((res, rej) => {
-        const resOutput = path.join(os.tmpdir(), Math.random().toString());
+        const resOutput = path.join(os.tmpdir(), Math.random().toString().split('.')[1]);
         fs.mkdirSync(resOutput);
         res(resOutput);
     });
