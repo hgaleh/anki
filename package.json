@@ -37,5 +37,10 @@
     "sql.js": "^0.5.0",
     "srt-parser-2": "^1.2.3",
     "yargs": "^17.7.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.2",
+    "webpack": "^5.94.0",
+    "webpack-cli": "^5.1.4"
   }
 }

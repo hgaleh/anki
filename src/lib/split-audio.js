@@ -35,7 +35,7 @@ exports.splitAudio = function(inputFile, startTime, endTime, outputFile, isConve
             '-b:a',
             '128k',
             outputFile
-        ]);
+        ]); // ffmpeg -i 05.mp4 -c:v libx264 -c:a aac -b:a 128k 05-out.mp4
 
         cmdFfmpeg.on('close', (code) => {
             if (code === 0) {

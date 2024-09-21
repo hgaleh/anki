@@ -9,6 +9,7 @@ const { createAnki } = require('./create-anki');
 const { getSplitTimes } = require('./get-split-times');
 const { extractTextFromSubtitle } = require('./extract-text-from-subtitle');
 const { outputFileNameCalculate } = require('./output-file-name-calculate');
+const { reduceTime } = require('./reduce-time');
 
 exports.main = async function ({
     inputFile,
@@ -31,16 +32,17 @@ exports.main = async function ({
         return extractTextFromSubtitle(prev, curr);
     }, await getSplitTimes(prefixedInputFile));
 
+    const reducedTimeAndTextx = reduceTime(timesAndTexts);
 
-    const { prefix, getFileName, getPrefixedFileName } = await outputFileNameCalculate(timesAndTexts.length, convert);
+    const { prefix, getFileName, getPrefixedFileName } = await outputFileNameCalculate(reducedTimeAndTextx.length, convert);
 
     console.log("Creating splitted files...");
     console.log(`Temporary directory: ${prefix}`);
 
     console.log();
-    bar1.start(timesAndTexts.length, 0);
+    bar1.start(reducedTimeAndTextx.length, 0);
 
-    const jobAndCards = timesAndTexts.map((time, indx) => {
+    const jobAndCards = reducedTimeAndTextx.map((time, indx) => {
         const splitFileName = getFileName(indx);
         const prefixedSplitFileName = getPrefixedFileName(indx);
 
