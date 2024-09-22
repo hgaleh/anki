@@ -2,14 +2,14 @@ import { spawn } from 'child_process';
 import { timeToSeconds } from './time-to-seconds';
 import { SubtitleBlock } from './type/subtitle-block';
 
-export function getSplitTimes(inputFile: string) {
+export function getSplitTimes(inputFile: string, silence: number) {
     return new Promise<SubtitleBlock[]>((resolve, reject) => {
         const silentPeriods: Partial<SubtitleBlock>[] = [];
         let durationMatch: any;
 
         const ffmpeg = spawn('ffmpeg', [
             '-i', inputFile,
-            '-af', 'silencedetect=noise=-20dB:d=0.5', // Adjust threshold & duration as needed
+            '-af', `silencedetect=noise=-${silence}dB:d=0.5`, // Adjust threshold & duration as needed
             '-f', 'null', '-'
         ]);
 
@@ -59,31 +59,50 @@ function getSplits(silences: Partial<SubtitleBlock>[], duration: number): Subtit
         return [];
     }
 
-    const modifiedSilences = silences.map(({start, end}) => {
-        return buildBlock((start + end) / 2, (start + end) / 2)
+    const modifiedSilences: SubtitleBlock[] = silences.map(({start, end}) => {
+        const midPoint = (start + end) / 2;
+        return {
+            startMargin: midPoint,
+            endMargin: midPoint,
+            start,
+            end,
+            text: []
+        }
     });
 
     const nonSilentPoints: SubtitleBlock[] = [];
 
     for (let i = 0; i < modifiedSilences.length - 1; i++) {
-        nonSilentPoints.push(buildBlock(modifiedSilences[i].end, modifiedSilences[i + 1].start));
+        nonSilentPoints.push({
+            startMargin: modifiedSilences[i].endMargin,
+            start: modifiedSilences[i].end,
+            end: modifiedSilences[i + 1].start,
+            endMargin: modifiedSilences[i + 1].startMargin,
+            text: []
+        });
     }
 
     if(modifiedSilences[0].start > 0) {
-        nonSilentPoints.unshift(buildBlock(0, modifiedSilences[0].start));
+        // buildBlock(0, modifiedSilences[0].start)
+        nonSilentPoints.unshift({
+            startMargin: 0,
+            start: 0,
+            end: modifiedSilences[0].start,
+            endMargin: modifiedSilences[0].startMargin,
+            text: []
+        });
     }
 
     if (modifiedSilences[modifiedSilences.length - 1].end < duration) {
-        nonSilentPoints.push(buildBlock(modifiedSilences[modifiedSilences.length - 1].end, duration));
+        // buildBlock(modifiedSilences[modifiedSilences.length - 1].end, duration)
+        nonSilentPoints.push({
+            startMargin: modifiedSilences[modifiedSilences.length - 1].endMargin,
+            start: modifiedSilences[modifiedSilences.length - 1].end,
+            end: duration,
+            endMargin: duration,
+            text: []
+        });
     }
 
     return nonSilentPoints;
-}
-
-function buildBlock(start: number, end: number): SubtitleBlock {
-    if((start === undefined) && (end === undefined)) {
-        throw "start and end are required";
-    }
-
-    return { start, end, text: [] }
 }

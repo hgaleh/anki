@@ -17,7 +17,8 @@ export async function main(
     inputFile: string,
     srtFileList: string[],
     concurrent: number,
-    deck: string
+    deck: string,
+    silence: number
 ) {
     const deckName = deck ? deck : path.basename(inputFile).split('.').shift();
     const sanitisedDeckName = fullSanitize(deckName);
@@ -31,7 +32,7 @@ export async function main(
 
     const timesAndTexts: SubtitleBlock[] = subtitleList.reduce((prev, curr) => {
         return extractTextFromSubtitle(prev, curr);
-    }, await getSplitTimes(prefixedInputFile));
+    }, await getSplitTimes(prefixedInputFile, silence));
 
     const reducedTimeAndTextx = srtFileList.length > 0 ? reduceTime(timesAndTexts) : timesAndTexts;
 

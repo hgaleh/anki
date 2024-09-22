@@ -10,8 +10,9 @@ export function createAnki(deckName: string, cardData: CardMeta[]) {
    
     cardData.forEach(card => {
       const mediaAddress = `${prefix}-${card.fileName}`;
-      const text = card.text.reduce((prev, cur) => {
-        return prev + `<p>${cur}</p>`;
+      const text = card.text.reduce((prev, cur, i) => {
+        const style = i % 2 === 0 ? 'style="color: yellow"' : '';
+        return prev + `<p ${style}>${cur}</p>`;
       }, '');
       apkg.addMedia(mediaAddress, card.media);
       apkg.addCard(`[sound:${mediaAddress}]`, `${text}`);

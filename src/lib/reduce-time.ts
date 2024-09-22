@@ -16,7 +16,9 @@ export function reduceTime(timesAndTexts: SubtitleBlock[]): SubtitleBlock[] {
         reducedTimesAndTexts.push({
             start: timesAndTexts[i].start,
             end: timesAndTexts[j].end,
-            text: timesAndTexts[i].text
+            text: timesAndTexts[i].text,
+            startMargin: timesAndTexts[i].startMargin,
+            endMargin: timesAndTexts[j].endMargin
         });
         i = j + 1;
     }

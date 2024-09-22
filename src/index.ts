@@ -7,6 +7,7 @@ interface ArgType {
     srt: string[];
     concurrent: number;
     deck: string;
+    silence: number;
 }
 
 yargs(hideBin(process.argv))
@@ -26,21 +27,29 @@ yargs(hideBin(process.argv))
                 })
                 .options('concurrent', {
                     type: 'number',
+                    alias: 'c',
                     default: 1,
                     description: 'Maximum concurrent output files to be created'
-                }).
-                options('deck', {
+                })
+                .options('silence', {
+                    type: 'number',
+                    alias: 's',
+                    default: 20,
+                    description: 'silence level which detects split points in the media, less silence causes more split points and more cards'
+                })
+                .options('deck', {
                     alias: 'd',
                     type: 'string',
                     description: 'Anki deck name, default is the input file name'
                 });
         },
-        async ({ input, srt, concurrent, deck }) => {
+        async ({ input, srt, concurrent, deck, silence }) => {
             await main(
                 input,
                 srt,
                 concurrent,
-                deck
+                deck,
+                silence
             );
         }
     )

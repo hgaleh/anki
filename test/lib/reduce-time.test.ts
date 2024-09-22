@@ -83,5 +83,37 @@ describe('reduce time function', () => {
             end: 4,
             text: []
         });
-    })
+    });
+
+    it('more than two equal subtitles', () => {
+        const subtitleBlockList: SubtitleBlock[] = [{
+            start: 1,
+            end: 2,
+            text: []
+        }, {
+            start: 3,
+            end: 4,
+            text: []
+        }, {
+            start: 5,
+            end: 6,
+            text: []
+        },{
+            start: 7,
+            end: 8,
+            text: ['some text']
+        }];
+        const res = reduceTime(subtitleBlockList);
+        expect(res.length === 2);
+        expect(res[0]).toEqual({
+            start: 1,
+            end: 6,
+            text: []
+        });
+        expect(res[1]).toEqual({
+            start: 7,
+            end: 8,
+            text: ['some text']
+        })
+    });
 })
