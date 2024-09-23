@@ -59,44 +59,52 @@ function getSplits(silences: Partial<SubtitleBlock>[], duration: number): Subtit
         return [];
     }
 
-    const modifiedSilences: SubtitleBlock[] = silences.map(({start, end}) => {
-        const midPoint = (start + end) / 2;
+    const modifiedSilences = silences.map(({start, end}) => {
         return {
-            startMargin: midPoint,
-            endMargin: midPoint,
+            midPoint: (start + end) / 2,
             start,
-            end,
-            text: []
+            end
         }
     });
 
     const nonSilentPoints: SubtitleBlock[] = [];
 
+    /** 
+     * start of i-th silence
+     * mid     
+     * end
+     * 
+     *        the real voice is here
+     * 
+     * start of i+1-th silence
+     * mid
+     * end
+    */
     for (let i = 0; i < modifiedSilences.length - 1; i++) {
         nonSilentPoints.push({
-            startMargin: modifiedSilences[i].endMargin,
+            startMargin: modifiedSilences[i].midPoint,
             start: modifiedSilences[i].end,
             end: modifiedSilences[i + 1].start,
-            endMargin: modifiedSilences[i + 1].startMargin,
+            endMargin: modifiedSilences[i + 1].midPoint,
             text: []
         });
     }
 
+    // in case the film does not start with silence
     if(modifiedSilences[0].start > 0) {
-        // buildBlock(0, modifiedSilences[0].start)
         nonSilentPoints.unshift({
             startMargin: 0,
             start: 0,
             end: modifiedSilences[0].start,
-            endMargin: modifiedSilences[0].startMargin,
+            endMargin: modifiedSilences[0].midPoint,
             text: []
         });
     }
 
+    // in case the film does not end with silence
     if (modifiedSilences[modifiedSilences.length - 1].end < duration) {
-        // buildBlock(modifiedSilences[modifiedSilences.length - 1].end, duration)
         nonSilentPoints.push({
-            startMargin: modifiedSilences[modifiedSilences.length - 1].endMargin,
+            startMargin: modifiedSilences[modifiedSilences.length - 1].midPoint,
             start: modifiedSilences[modifiedSilences.length - 1].end,
             end: duration,
             endMargin: duration,

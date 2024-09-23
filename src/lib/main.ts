@@ -56,7 +56,7 @@ export async function main(
         const prefixedSplitFileName = getPrefixedFileName(indx);
 
         return {
-            job: splitAudio(prefixedInputFile, time.start, time.end, prefixedSplitFileName),
+            job: splitAudio(prefixedInputFile, time.startMargin, time.endMargin, prefixedSplitFileName),
             card: { text: time.text, media: prefixedSplitFileName, fileName: splitFileName }
         }
     });
