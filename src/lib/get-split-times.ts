@@ -2,14 +2,14 @@ import { spawn } from 'child_process';
 import { timeToSeconds } from './time-to-seconds';
 import { SubtitleBlock } from './type/subtitle-block';
 
-export function getSplitTimes(inputFile: string, silence: number) {
+export function getSplitTimes(inputFile: string, silence: number, silenceDuration: number) {
     return new Promise<SubtitleBlock[]>((resolve, reject) => {
         const silentPeriods: Partial<SubtitleBlock>[] = [];
         let durationMatch: any;
 
         const ffmpeg = spawn('ffmpeg', [
             '-i', inputFile,
-            '-af', `silencedetect=noise=-${silence}dB:d=0.5`, // Adjust threshold & duration as needed
+            '-af', `silencedetect=noise=-${silence}dB:d=${silenceDuration}`, // Adjust threshold & duration as needed
             '-f', 'null', '-'
         ]);
 

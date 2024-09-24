@@ -12,107 +12,143 @@ describe('reduce time function', () => {
         const subtitleBlockList: SubtitleBlock[] = [{
             end: 2,
             start: 1,
-            text: []
+            text: [],
+            startMargin: 0,
+            endMargin: 3
         }];
         const res = reduceTime(subtitleBlockList);
         expect(res.length === 1);
         expect(res[0]).toEqual({
             end: 2,
             start: 1,
-            text: []
+            text: [],
+            startMargin: 0,
+            endMargin: 3
         });
     });
 
     it('two subtitles given and they are not same, should return both', () => {
         const subtitleBlockList: SubtitleBlock[] = [{
+            startMargin: 0,
             start: 1,
             end: 2,
+            endMargin: 3,
             text: []
         }, {
-            start: 3,
-            end: 4,
+            startMargin: 4,
+            start: 5,
+            end: 6,
+            endMargin: 7,
             text: ['some other text']
         }];
         const res = reduceTime(subtitleBlockList);
         expect(res.length === 2);
         expect(res[0]).toEqual({
+            startMargin: 0,
             start: 1,
             end: 2,
+            endMargin: 3,
             text: []
         });
         expect(res[1]).toEqual({
-            start: 3,
-            end: 4,
+            startMargin: 4,
+            start: 5,
+            end: 6,
+            endMargin: 7,
             text: ['some other text']
         })
     });
 
     it('two subtitles with same text should return only one subtitle', () => {
         const subtitleBlockList: SubtitleBlock[] = [{
-            start: 1,
-            end: 2,
+            startMargin: 1,
+            start: 2,
+            end: 3,
+            endMargin: 4,
             text: ['some text']
         }, {
-            start: 3,
-            end: 4,
+            startMargin: 5,
+            start: 6,
+            end: 7,
+            endMargin: 8,
             text: ['some text']
         }];
         const res = reduceTime(subtitleBlockList);
         expect(res.length === 1);
         expect(res[0]).toEqual({
-            start: 1,
-            end: 4,
+            startMargin: 1,
+            start: 2,
+            end: 7,
+            endMargin: 8,
             text: ['some text']
         });
     });
 
     it('two equal subtitles with empty text', () => {
         const subtitleBlockList: SubtitleBlock[] = [{
-            start: 1,
-            end: 2,
+            startMargin: 1,
+            endMargin: 4,
+            start: 2,
+            end: 3,
             text: []
         }, {
-            start: 3,
-            end: 4,
+            startMargin: 5,
+            endMargin: 8,
+            start: 6,
+            end: 7,
             text: []
         }];
         const res = reduceTime(subtitleBlockList);
         expect(res.length === 1);
         expect(res[0]).toEqual({
-            start: 1,
-            end: 4,
+            startMargin: 1,
+            start: 2,
+            end: 7,
+            endMargin: 8,
             text: []
         });
     });
 
     it('more than two equal subtitles', () => {
         const subtitleBlockList: SubtitleBlock[] = [{
-            start: 1,
-            end: 2,
+            startMargin: 1,
+            start: 2,
+            end: 3,
+            endMargin: 4,
             text: []
         }, {
-            start: 3,
-            end: 4,
+            startMargin: 5,
+            start: 6,
+            end: 7,
+            endMargin: 8,
             text: []
         }, {
-            start: 5,
-            end: 6,
+            startMargin: 9,
+            start: 10,
+            end: 11,
+            endMargin: 12,
             text: []
         },{
-            start: 7,
-            end: 8,
+            startMargin: 13,
+            start: 14,
+            end: 15,
+            endMargin: 16,
             text: ['some text']
         }];
         const res = reduceTime(subtitleBlockList);
         expect(res.length === 2);
         expect(res[0]).toEqual({
-            start: 1,
-            end: 6,
+            startMargin: 1,
+            start: 2,
+            end: 11,
+            endMargin: 12,
             text: []
         });
         expect(res[1]).toEqual({
-            start: 7,
-            end: 8,
+            startMargin: 13,
+            start: 14,
+            end: 15,
+            endMargin: 16,
             text: ['some text']
         })
     });

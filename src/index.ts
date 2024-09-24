@@ -8,6 +8,8 @@ interface ArgType {
     concurrent: number;
     deck: string;
     silence: number;
+    silenceDuration: number;
+    play: boolean;
 }
 
 yargs(hideBin(process.argv))
@@ -37,19 +39,31 @@ yargs(hideBin(process.argv))
                     default: 20,
                     description: 'silence level which detects split points in the media, less silence causes more split points and more cards'
                 })
+                .options('silence-duration', {
+                    type: 'number',
+                    default: 0.2,
+                    description: 'minimum duration of silence (in seconds) that can be split point, the less silence-duration the more cards'
+                })
+                .option('play', {
+                    type: 'boolean',
+                    default: false,
+                    description: 'only play the split parts and do not export anything'
+                })
                 .options('deck', {
                     alias: 'd',
                     type: 'string',
                     description: 'Anki deck name, default is the input file name'
                 });
         },
-        async ({ input, srt, concurrent, deck, silence }) => {
+        async ({ input, srt, concurrent, deck, silence, silenceDuration, play }) => {
             await main(
                 input,
                 srt,
                 concurrent,
                 deck,
-                silence
+                silence,
+                silenceDuration,
+                play
             );
         }
     )
