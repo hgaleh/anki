@@ -54,7 +54,7 @@ export function play(reducedTimeAndText: SubtitleBlock[], prefixedInputFile: str
 }
 
 function pressedQuitButton(key: any): boolean {
-    return key.name === 'escape' || key.name === 'q' || key.name === 'Q' || key.ctrl && key.name === 'c';
+    return key.name === 'q' || key.name === 'Q' || key.ctrl && key.name === 'c';
 }
 
 class PlayerController {
