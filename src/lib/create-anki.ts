@@ -7,7 +7,6 @@ import { CardMeta } from './type/card-meta';
 import { from, lastValueFrom, mergeMap, tap } from 'rxjs';
 import { AnkiExporter } from './anki-exporter';
 
-
 export async function createAnki(deck: string, inputFile: string, reducedTimeAndText: SubtitleBlock[], concurrent: number) {
   const deckName = deck ? deck : path.basename(inputFile).split('.').shift();
   const prefixedInputFile = path.resolve(inputFile);

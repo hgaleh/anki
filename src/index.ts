@@ -27,19 +27,19 @@ yargs(hideBin(process.argv))
                     type: 'array',
                     default: []
                 })
-                .options('concurrent', {
+                .option('concurrent', {
                     type: 'number',
                     alias: 'c',
                     default: 1,
                     description: 'Maximum concurrent output files to be created'
                 })
-                .options('silence', {
+                .option('silence', {
                     type: 'number',
                     alias: 's',
                     default: 20,
                     description: 'silence level which detects split points in the media, less silence causes more split points and more cards'
                 })
-                .options('silence-duration', {
+                .option('silence-duration', {
                     type: 'number',
                     default: 0.2,
                     description: 'minimum duration of silence (in seconds) that can be split point, the less silence-duration the more cards'
@@ -49,13 +49,13 @@ yargs(hideBin(process.argv))
                     default: false,
                     description: 'only play the split parts and do not export anything'
                 })
-                .options('deck', {
+                .option('deck', {
                     alias: 'd',
                     type: 'string',
                     description: 'Anki deck name, default is the input file name'
                 });
         },
-        async ({ input, srt, concurrent, deck, silence, silenceDuration, play }) => {
+        async ({ input, srt, concurrent, deck, silence, silenceDuration, play, cache }) => {
             await main(
                 input,
                 srt,

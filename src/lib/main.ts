@@ -2,7 +2,7 @@ import path from 'path';
 
 import { createAnki } from './create-anki';
 import { getSubtitleAndTimes } from './get-subtitle-and-times';
-import { play } from './play';
+import { startServer } from './start-server';
 
 
 export async function main(
@@ -20,10 +20,8 @@ export async function main(
     const reducedTimeAndText = await getSubtitleAndTimes(srtFileList, prefixedInputFile, silence, silenceDuration);
 
     if (isPlay) {
-        await play(reducedTimeAndText, prefixedInputFile);
-        process.exit();
+        startServer(reducedTimeAndText, prefixedInputFile);
     } else {
         await createAnki(deck, inputFile, reducedTimeAndText, concurrent);
     }
 }
-

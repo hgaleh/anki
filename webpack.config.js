@@ -4,6 +4,8 @@ const { GeneratePackageJsonPlugin } = require('./plugin/generate-package-json-pl
 const isProduction = process.env.NODE_ENV == 'production';
 const webpack = require('webpack');
 const { MakeExecutablePlugin } = require('./plugin/make-executable-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const config = {
     entry: './src/index.ts',
@@ -50,7 +52,13 @@ const config = {
                 anki: "index.js"
             },
         }),
-        new MakeExecutablePlugin('index.js')
+        new MakeExecutablePlugin('index.js'),
+        new CopyWebpackPlugin({
+            patterns: [
+                { from: 'src/index.html', to: 'index.html' }
+            ]
+        }),
+        new CleanWebpackPlugin()
     ]
 };
 

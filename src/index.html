@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<style>
+    .controls {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .controls>.buttons {
+        justify-content: space-evenly;
+        display: flex;
+        margin-top: 0.5rem;
+    }
+
+    .controls>.buttons>button {
+        width: 7rem;
+        height: 2rem;
+    }
+
+    #subtitles {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #subtitles > p {
+        font-size: 1.5rem;
+    }
+
+    #subtitles > p:nth-child(2n + 1) {
+        color: darkblue;
+    }
+
+    #progressBar {
+        width: 100%;
+    }
+
+    #video {
+        width: 100%;
+        height: 800px;
+    }
+</style>
+
+<body>
+    <video id="video">
+        <!-- The video file -->
+        <source src="/video" type="video/mp4">
+        <!-- Optional fallback content for older browsers -->
+        Your browser does not support the video tag.
+    </video>
+    <div class="controls">
+        <progress id="progressBar"></progress>
+        <div class="buttons">
+            <button id="btnPrev">&lt;</button>
+            <button id="btnPlay">&triangleright;</button>
+            <button id="btnNext">&gt;</button>
+        </div>
+        <div id="subtitles">
+        </div>
+    </div>
+    <script>
+        let start = 0;
+        let end = 0;
+        let currentIndex = 0;
+
+        function createSubtitlesElement(text) {
+            const p = document.createElement('p');
+            const txt = document.createTextNode(text);
+            p.appendChild(txt);
+            return p;
+        }
+
+        fetch('/subtitle.json').then(res => {
+            return res.json()
+        }).then(subtitleData => {
+            console.log(subtitleData)
+            const maxIndex = subtitleData.length - 1;
+
+            const video = document.getElementById('video');
+            const progressBar = document.getElementById('progressBar');
+            const subtitles = document.getElementById('subtitles')
+            progressBar.max = maxIndex;
+            progressBar.value = 0;
+
+            // Event listener to start video at 1 second and stop it at 3 seconds
+            video.addEventListener('timeupdate', () => {
+                if (video.currentTime >= end) {
+                    video.pause(); // Pause the video at 3 seconds
+                }
+            });
+
+            // Function to start the video from 1 second
+            video.addEventListener('play', () => {
+                if (video.currentTime < start || video.currentTime > end) {
+                    video.currentTime = start; // Set the start point at 1 second
+                }
+            });
+
+            document.getElementById('btnNext').addEventListener('click', () => {
+                video.pause();
+                if (currentIndex < maxIndex) {
+                    currentIndex++;
+                }
+                const currentSubtitle = subtitleData[currentIndex];
+                start = currentSubtitle.startMargin;
+                end = currentSubtitle.endMargin;
+                progressBar.value = currentIndex;
+                subtitles.replaceChildren(...currentSubtitle.text.map(eachSub => createSubtitlesElement(eachSub)));
+            });
+
+            document.getElementById('btnPrev').addEventListener('click', () => {
+                video.pause();
+                if (currentIndex > 0) {
+                    currentIndex--;
+                }
+                const currentSubtitle = subtitleData[currentIndex];
+                start = currentSubtitle.startMargin;
+                end = currentSubtitle.endMargin;
+                progressBar.value = currentIndex;
+                subtitles.replaceChildren(...currentSubtitle.text.map(eachSub => createSubtitlesElement(eachSub)));
+            });
+            document.getElementById('btnPlay').addEventListener('click', () => {
+                video.play();
+            })
+        });
+    </script>
+</body>
+
+</html>
