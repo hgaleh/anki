@@ -28,6 +28,6 @@ export function reduceTime(timesAndTexts: SubtitleBlock[]): SubtitleBlock[] {
 
 function areSubtitleTextsEqual(searchArea: SubtitleBlock[]) {
     return function (i: number, j: number) {
-        return searchArea[i].text.join('') === searchArea[j].text.join('');
+        return searchArea[i].text[0] === searchArea[j].text[0];
     }
 }

@@ -48,16 +48,22 @@ function App() {
     });
 
     document.body.addEventListener('keydown', (e) => {
+      console.log('keydown');
       switch (e.code) {
         case 'ArrowRight':
-          onNext();
+          dispatch({
+            type: uiActionType.next
+          });
           break;
         case 'ArrowLeft':
-          onPrevious();
+          dispatch({
+            type: uiActionType.previous
+          });
           break;
         case 'Space':
-          console.log('space');
-          onPlay();
+          dispatch({
+            type: uiActionType.togglePlay
+          });
           break;
         default:
       }
