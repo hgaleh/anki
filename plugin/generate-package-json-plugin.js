@@ -14,7 +14,7 @@ exports.GeneratePackageJsonPlugin = class {
             delete packageJsonContent.scripts;
             delete packageJsonContent.scripts;
 
-            const outputPath = path.join(compiler.options.output.path, 'package.json');
+            const outputPath = path.join(compiler.options.output.path, '../package.json');
             const packageJsonString = JSON.stringify(packageJsonContent, null, 2);
 
             fs.writeFile(outputPath, packageJsonString, (err) => {

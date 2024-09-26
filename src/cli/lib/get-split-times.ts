@@ -1,6 +1,6 @@
 import { spawn } from 'child_process';
 import { timeToSeconds } from './time-to-seconds';
-import { SubtitleBlock } from './type/subtitle-block';
+import { SubtitleBlock } from '../../share/subtitle-block';
 
 export function getSplitTimes(inputFile: string, silence: number, silenceDuration: number) {
     return new Promise<SubtitleBlock[]>((resolve, reject) => {

@@ -1,0 +1,37 @@
+.controls {
+    display: flex;
+    flex-direction: column;
+}
+
+.controls>.buttons {
+    justify-content: space-evenly;
+    display: flex;
+    margin-top: 0.5rem;
+}
+
+.controls>.buttons>button {
+    width: 7rem;
+    height: 2rem;
+}
+
+.subtitles {
+    display: flex;
+    flex-direction: column;
+}
+
+.subtitles > p {
+    font-size: 1.5rem;
+}
+
+.subtitles > p:nth-child(2n + 1) {
+    color: darkblue;
+}
+
+.progressBar {
+    width: 100%;
+}
+
+.video {
+    width: 100%;
+    height: 800px;
+}

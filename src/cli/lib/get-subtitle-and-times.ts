@@ -5,7 +5,7 @@ import { getSplitTimes } from './get-split-times';
 import { extractTextFromSubtitle } from './extract-text-from-subtitle';
 import { reduceTime } from './reduce-time';
 import { Subtitle } from './type/subtitle';
-import { SubtitleBlock } from './type/subtitle-block';
+import { SubtitleBlock } from '../../share/subtitle-block';
 
 export async function getSubtitleAndTimes(srtFileList: string[], prefixedInputFile: string, silence: number, silenceDuration: number):  Promise<SubtitleBlock[]> {
     const prefixedSrtList = srtFileList.map(srtFile => path.resolve(srtFile));

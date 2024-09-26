@@ -5,12 +5,15 @@
     "noImplicitAny": true,
     "module": "nodenext",
     "target": "es2020",
+    "outDir": "cli-dist",
     "allowJs": false,
     "esModuleInterop": true,
     "sourceMap": true
   },
-  "files": ["src/index.ts"],
+  "files": ["src/cli/index.ts"],
   "include": [
-    "./src/lib/type/sql.d.ts"
+    "./src/cli/lib/type/sql.d.ts",
+    "./src/cli/**/*.ts",
+    "./src/share/**.ts"
   ]
 }

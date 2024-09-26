@@ -23,7 +23,7 @@ export function splitAudio(inputFile: string, startTime: number, endTime: number
             '-b:a',
             '128k',
             outputFile
-        ];
+        ]; // ffmpeg -i inputFile -c:v libx264 -c:a aac -b:a 128k outputFile
 
         const cmdFfmpeg = spawn('ffmpeg', args);
 

@@ -1,4 +1,4 @@
-import { SubtitleBlock } from './type/subtitle-block';
+import { SubtitleBlock } from '../../share/subtitle-block';
 
 export function reduceTime(timesAndTexts: SubtitleBlock[]): SubtitleBlock[] {
     if (timesAndTexts.length < 2) {

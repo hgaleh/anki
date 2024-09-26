@@ -1,6 +1,6 @@
 import { timeToSeconds } from './time-to-seconds';
 import { Subtitle } from './type/subtitle';
-import { SubtitleBlock } from './type/subtitle-block';
+import { SubtitleBlock } from '../../share/subtitle-block';
 
 export function extractTextFromSubtitle(splitTimes: SubtitleBlock[], subtitleBlocks: Subtitle[]): SubtitleBlock[] {
     const subtitleWithConvertedTimes = subtitleBlocks.map(subBlock => {

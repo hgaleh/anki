@@ -1,7 +1,7 @@
 import ProgressBar from 'progress';
 import path from 'path';
 import { outputFileNameCalculate } from './output-file-name-calculate';
-import { SubtitleBlock } from './type/subtitle-block';
+import { SubtitleBlock } from '../../share/subtitle-block';
 import { splitAudio } from './split-audio';
 import { CardMeta } from './type/card-meta';
 import { from, lastValueFrom, mergeMap, tap } from 'rxjs';
