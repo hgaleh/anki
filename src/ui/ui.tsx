@@ -96,7 +96,7 @@ function App() {
         <progress className="progressBar" value={state.currentIndex} max={state.subtitleData ? state.subtitleData.length - 1 : 0}></progress>
         <div className="buttons">
           <button onClick={onPrevious}>&lt;</button>
-          <button onClick={onPlay}>{state.isPlaying ? 'Stop' : 'Play'}</button>
+          <button onClick={onPlay}>{state.isPlaying ? 'Stop' : 'Play'} ({state.currentIndex})</button>
           <button onClick={onNext}>&gt;</button>
         </div>
         <div className="subtitles">
