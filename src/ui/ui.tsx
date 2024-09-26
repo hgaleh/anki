@@ -3,86 +3,104 @@ import reportWebVitals from './reportWebVitals';
 import { SubtitleBlock } from '../share/subtitle-block';
 import './style.css';
 
-import React, { useEffect, useRef, useState } from 'react';
-
-interface VideoEvent {
-  target: HTMLVideoElement
-}
+import React, { useEffect, useReducer, useRef } from 'react';
+import { initialUiState, uiActionType, uiReducer } from './ui.reducer';
 
 function App() {
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const [subtitleData, setSubtitleData] = useState<SubtitleBlock[] | null>(null);
+
   const videoElement = useRef<HTMLVideoElement>(null);
+
+  const [state, dispatch] = useReducer(uiReducer, initialUiState);
+
+  useEffect(() => {
+    if (videoElement.current && state.subtitleData && state.subtitleData.length > 0) {
+      videoElement.current.currentTime = state.subtitleData[state.currentIndex].startMargin;
+    }
+  }, [state.currentIndex, state.subtitleData]);
+
+  const onPrevious = () => {
+    dispatch({
+      type: uiActionType.previous
+    });
+  }
+
+  const onNext = () => {
+    dispatch({
+      type: uiActionType.next
+    });
+  }
+
+  
+  const onPlay = () => {
+    dispatch({
+      type: uiActionType.togglePlay
+    });
+  }
 
   useEffect(() => {
     fetch('/subtitle.json').then(res => {
       return res.json()
     }).then((subtitleData: SubtitleBlock[]) => {
-      setSubtitleData(subtitleData);
+      dispatch({
+        type: uiActionType.subtitlesReceived,
+        payload: subtitleData
+      })
     });
-  }, []);
 
-  const onTimeToUpdate = (e: any) => {
-    if (!subtitleData) {
+    document.body.addEventListener('keydown', (e) => {
+      switch (e.code) {
+        case 'ArrowRight':
+          onNext();
+          break;
+        case 'ArrowLeft':
+          onPrevious();
+          break;
+        case 'Space':
+          console.log('space');
+          onPlay();
+          break;
+        default:
+      }
+    })
+  }, [dispatch]);
+
+  const onTimeToUpdate = () => {
+    if (!videoElement.current) {
       return;
     }
 
-    const currentSub = subtitleData[currentIndex];
-
-    if (e.target.currentTime >= currentSub.endMargin) {
-      e.target.pause();
-    }
+    dispatch({
+      type: uiActionType.timeToUpdate,
+      payload: videoElement.current.currentTime
+    });
   }
 
-  const onVideoPlayed = () => {
-    if (!subtitleData || !videoElement.current) {
-      return;
+  useEffect(() => {
+    if (videoElement.current) {
+      if (state.isPlaying) {
+        videoElement.current?.play();
+      } else {
+        videoElement.current.currentTime = state.subtitleData ? state.subtitleData[state.currentIndex].startMargin : 0;
+        videoElement.current.pause();
+      }
     }
-
-    if (videoElement.current.currentTime < subtitleData[currentIndex].startMargin || videoElement.current.currentTime > subtitleData[currentIndex].endMargin) {
-      videoElement.current.currentTime = subtitleData[currentIndex].startMargin; // Set the start point at 1 second
-    }
-  }
-
-  const onNext = () => {
-    if (!subtitleData) {
-      return;
-    }
-
-    videoElement.current?.pause();
-
-    if (currentIndex < subtitleData.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-    }
-  }
-
-  const onPrevious = () => {
-    videoElement.current?.pause();
-
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
-    }
-  }
-
-  const onPlay = () => {
-    videoElement.current?.play();
-  }
+  }, [state.isPlaying]);
 
   return (
     <>
-      <video className="video" ref={videoElement} onTimeUpdate={onTimeToUpdate} onPlay={onVideoPlayed}>
+      <video className="video" ref={videoElement} onTimeUpdate={onTimeToUpdate}>
         <source src="/video" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
       <div className="controls">
-        <progress className="progressBar" value={currentIndex} max={subtitleData ? subtitleData.length - 1 : 0}></progress>
+        <progress className="progressBar" value={state.currentIndex} max={state.subtitleData ? state.subtitleData.length - 1 : 0}></progress>
         <div className="buttons">
           <button onClick={onPrevious}>&lt;</button>
-          <button onClick={onPlay}>&triangleright;</button>
+          <button onClick={onPlay}>{state.isPlaying ? 'Stop' : 'Play'}</button>
           <button onClick={onNext}>&gt;</button>
         </div>
         <div className="subtitles">
-          {subtitleData && subtitleData[currentIndex].text.map((eachSub, i) => <p key={`${currentIndex}-${i}`}>{eachSub}</p>)}
+          {state.subtitleData && state.subtitleData[state.currentIndex].text.map((eachSub: any, i: any) => <p key={`${state.currentIndex}-${i}`}>{eachSub}</p>)}
         </div>
       </div>
     </>
@@ -98,8 +116,4 @@ root.render(
   </React.StrictMode>
 );
 
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
