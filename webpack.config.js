@@ -6,6 +6,8 @@ const webpack = require('webpack');
 const { MakeExecutablePlugin } = require('./plugin/make-executable-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+
 
 const cli = {
     entry: {
@@ -60,7 +62,14 @@ const cli = {
             },
         }),
         new MakeExecutablePlugin('index.js'),
-        new CleanWebpackPlugin()
+        new CleanWebpackPlugin(),
+        new CopyWebpackPlugin({
+            patterns: [
+                {
+                    from: path.resolve('README.md'), to: path.resolve('dist')
+                }
+            ]
+        })
     ]
 };
 
