@@ -30,7 +30,7 @@ function App() {
     });
   }
 
-  
+
   const onPlay = () => {
     dispatch({
       type: uiActionType.togglePlay
@@ -48,7 +48,7 @@ function App() {
     });
 
     document.body.addEventListener('keydown', (e) => {
-      console.log('keydown');
+      e.preventDefault();
       switch (e.code) {
         case 'ArrowRight':
           dispatch({
@@ -101,9 +101,9 @@ function App() {
       <div className="controls">
         <progress className="progressBar" value={state.currentIndex} max={state.subtitleData ? state.subtitleData.length - 1 : 0}></progress>
         <div className="buttons">
-          <button onClick={onPrevious}>&lt;</button>
-          <button onClick={onPlay}>{state.isPlaying ? 'Stop' : 'Play'} ({state.currentIndex})</button>
-          <button onClick={onNext}>&gt;</button>
+          <button tabIndex={-1} onClick={onPrevious}>&lt;</button>
+          <button tabIndex={-1} onClick={onPlay}>{state.isPlaying ? 'Stop' : 'Play'} ({state.currentIndex})</button>
+          <button tabIndex={-1} onClick={onNext}>&gt;</button>
         </div>
         <div className="subtitles">
           {state.subtitleData && state.subtitleData[state.currentIndex].text.map((eachSub: any, i: any) => <p key={`${state.currentIndex}-${i}`}>{eachSub}</p>)}
