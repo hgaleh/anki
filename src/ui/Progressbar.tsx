@@ -11,9 +11,9 @@ interface Props {
 export function Progressbar({ selectedIndex, subtitleData, className }: Props) {
     const containerStyle: CSSProperties = {
         display: 'flex',
-        height: '10px',
         flexDirection: 'row',
-        justifyContent: 'flex-start'
+        justifyContent: 'flex-start',
+        overflow: 'hidden'
     };
 
     if (!subtitleData) {

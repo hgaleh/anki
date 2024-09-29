@@ -3,9 +3,10 @@ import reportWebVitals from './reportWebVitals';
 import { SubtitleBlock } from '../share/subtitle-block';
 import './style.css';
 
-import React, { useEffect, useReducer, useRef } from 'react';
+import React, { useCallback, useEffect, useReducer, useRef } from 'react';
 import { initialUiState, uiActionType, uiReducer } from './ui.reducer';
 import { Progressbar } from './Progressbar';
+import { exportSrt } from './export-srt';
 
 function App() {
 
@@ -93,6 +94,10 @@ function App() {
     }
   }, [state.isPlaying]);
 
+  const onExport = useCallback(() => {
+    exportSrt(state.subtitleData, 0);
+  }, [state.subtitleData])
+
   return (
     <>
       <video className="video" ref={videoElement} onTimeUpdate={onTimeToUpdate}>
@@ -105,9 +110,10 @@ function App() {
           <button title='Left' tabIndex={-1} onClick={onPrevious}>&lt;</button>
           <button title='Space' tabIndex={-1} onClick={onPlay}>{state.isPlaying ? 'Stop' : 'Play'} ({state.currentIndex})</button>
           <button title='Right' tabIndex={-1} onClick={onNext}>&gt;</button>
+          <button tabIndex={-1} onClick={onExport}>Export</button>
         </div>
         <div className="subtitles">
-          {state.subtitleData && state.subtitleData[state.currentIndex].text.map((eachSub: any, i: any) => <p key={`${state.currentIndex}-${i}`}>{eachSub}</p>)}
+          {state.subtitleData && state.subtitleData[state.currentIndex].text.map((eachSub: any, i: any) => <textarea key={`${state.currentIndex}-${i}`}>{eachSub}</textarea>)}
         </div>
       </div>
     </>
