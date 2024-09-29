@@ -5,6 +5,7 @@ import './style.css';
 
 import React, { useEffect, useReducer, useRef } from 'react';
 import { initialUiState, uiActionType, uiReducer } from './ui.reducer';
+import { Progressbar } from './Progressbar';
 
 function App() {
 
@@ -99,11 +100,11 @@ function App() {
         Your browser does not support the video tag.
       </video>
       <div className="controls">
-        <progress className="progressBar" value={state.currentIndex} max={state.subtitleData ? state.subtitleData.length - 1 : 0}></progress>
+        <Progressbar subtitleData={state.subtitleData} className='progressBar' selectedIndex={state.currentIndex} />
         <div className="buttons">
-          <button tabIndex={-1} onClick={onPrevious}>&lt;</button>
-          <button tabIndex={-1} onClick={onPlay}>{state.isPlaying ? 'Stop' : 'Play'} ({state.currentIndex})</button>
-          <button tabIndex={-1} onClick={onNext}>&gt;</button>
+          <button title='Left' tabIndex={-1} onClick={onPrevious}>&lt;</button>
+          <button title='Space' tabIndex={-1} onClick={onPlay}>{state.isPlaying ? 'Stop' : 'Play'} ({state.currentIndex})</button>
+          <button title='Right' tabIndex={-1} onClick={onNext}>&gt;</button>
         </div>
         <div className="subtitles">
           {state.subtitleData && state.subtitleData[state.currentIndex].text.map((eachSub: any, i: any) => <p key={`${state.currentIndex}-${i}`}>{eachSub}</p>)}
