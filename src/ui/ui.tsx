@@ -132,17 +132,11 @@ function App() {
 
   return (
     <>
-      <video className={style.video} ref={videoElement} onTimeUpdate={onTimeToUpdate}>
-        <source src="/video" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
-      <div className={style.controls}>
-        <Progressbar subtitleData={state.subtitleData as SubtitleBlock[]} className={style.progressBar} selectedIndex={state.currentIndex} />
-        <div className={style.buttons} onFocus={preventDefault}>
-          <button title='Left' onClick={onPrevious}><BsFillRewindFill color='white' /></button>
-          <button title='Space' onClick={onPlay}>{state.isPlaying ? <FaStop color='white' /> : <FaPlay color='white' />}</button>
-          <button title='Right' onClick={onNext}><FaForward color='white' /></button>
-        </div>
+      <div className={style.viewport}>
+        <video className={style.video} ref={videoElement} onTimeUpdate={onTimeToUpdate}>
+          <source src="/video" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
         <div className={style.subtitles} onKeyDown={stopPropoagation}>
           {state.subtitleData && state.subtitleData[state.currentIndex].text.map((eachSub: any, i: any) => {
             return (
@@ -153,6 +147,14 @@ function App() {
             )
           })}
           <button onClick={addNewSubtitle} className={style.addSubtitle}><IoMdAdd size={25} /></button>
+        </div>
+        <Progressbar subtitleData={state.subtitleData as SubtitleBlock[]} className={style.progressBar} selectedIndex={state.currentIndex} />
+        <div className={style.controls}>
+          <div className={style.buttons} onFocus={preventDefault}>
+            <button title='Left' onClick={onPrevious}><BsFillRewindFill color='white' /></button>
+            <button title='Space' onClick={onPlay}>{state.isPlaying ? <FaStop color='white' /> : <FaPlay color='white' />}</button>
+            <button title='Right' onClick={onNext}><FaForward color='white' /></button>
+          </div>
         </div>
       </div>
     </>
