@@ -46,8 +46,10 @@ export function getSplitTimes(inputFile: string, silence: number, silenceDuratio
             if (code === 0) {
                 const fileDuration = timeToSeconds(durationMatch[1]);
                 resolve(getSplits(silentPeriods, fileDuration));
+                return;
             } else {
                 reject(`ffmpeg exited with code ${code}`);
+                return;
             }
         });
     });

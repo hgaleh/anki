@@ -52,11 +52,13 @@ class Exporter {
       const output = fs.createWriteStream(path);
       this.zip.on('close', function() {
         res();
+        return;
       });
       
       // Catch any errors that might occur
       this.zip.on('error', function(err) {
-        rej(err)
+        rej(err);
+        return;
       });
 
       const binaryArray = this.db.export();

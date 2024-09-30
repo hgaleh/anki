@@ -11,10 +11,12 @@ export function getSubtitleBlocks(srtFileName: string): Promise<Subtitle[]> {
             fs.readFile(srtFileName, 'utf8', (err, data) => {
                 if (err) {
                     rej('Error reading file:' + err);
+                    return;
                 }
                 const items = parser.fromSrt(data);
 
                 res(items);
+                return;
             });
         });
     });

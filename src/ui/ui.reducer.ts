@@ -17,7 +17,7 @@ export const initialUiState: StateType = {
       case uiActionType.previous:
         {
           const currentIndex = Math.max(0, state.currentIndex - 1);
-          return {...state, ...{ currentIndex }};
+          return Object.assign({}, state, { currentIndex });
         }
       case uiActionType.next:
         {
@@ -25,12 +25,12 @@ export const initialUiState: StateType = {
             return state;
           }
           const currentIndex = Math.min(state.subtitleData.length - 1, state.currentIndex + 1);
-          return {...state, ...{ currentIndex }};
+          return Object.assign({}, state, { currentIndex });
         }
       case uiActionType.subtitlesReceived:
         {
           const subtitleData = action.payload;
-          return { ...state, subtitleData };
+          return Object.assign({}, state, {subtitleData});
         }
       case uiActionType.timeToUpdate:
         {
@@ -42,11 +42,38 @@ export const initialUiState: StateType = {
           const currentSubtitle = state.subtitleData[state.currentIndex];
   
           const isPlayTime = (currentTime <= currentSubtitle.endMargin) && (currentTime > currentSubtitle.startMargin);
-          return { ...state, ...{ isPlaying: isPlayTime } };
+          return Object.assign({}, state, { isPlaying: isPlayTime });
         }
       case uiActionType.togglePlay:
         {
-          return { ...state, ...{ isPlaying: !state.isPlaying } };
+          return Object.assign({}, state, { isPlaying: !state.isPlaying });
+        }
+      case uiActionType.updateSubtitleText:
+        {
+          if (!state.subtitleData) {
+            return state;
+          }
+          const { index, text } = action.payload;
+          const newSubtitleData = state.subtitleData.map((block, blockIndex) => {
+            const newText = block.text.map((currentText, subtitleIndex) => {
+              return (subtitleIndex === index && blockIndex === state.currentIndex) ? text : currentText;
+            })
+            return Object.assign({}, block, { text: newText });
+          });
+
+          return Object.assign({}, state, { subtitleData: newSubtitleData });
+        }
+      case uiActionType.addNewSubtitle:
+        {
+          if (!state.subtitleData) {
+            return state;
+          }
+          const newSubtitleData = state.subtitleData.map(block => {
+            const newText = block.text.slice();
+            newText.push('');
+            return Object.assign({}, block, { text: newText });
+          });
+          return Object.assign({}, state, { subtitleData: newSubtitleData });
         }
       default:
         return state;
@@ -59,4 +86,6 @@ export const initialUiState: StateType = {
     subtitlesReceived = 'subtitlesReceived',
     timeToUpdate = 'timeToUpdate',
     togglePlay = 'togglePlay',
+    updateSubtitleText = 'updateSubtitleText',
+    addNewSubtitle = 'addNewSubtitle'
   }

@@ -64,7 +64,7 @@ yargs(hideBin(process.argv))
                 silence,
                 silenceDuration,
                 play
-            );
+            ).catch(console.error);
         }
     )
     .help()

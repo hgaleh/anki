@@ -100,6 +100,7 @@ function buildAnki(deckName: string, cardData: CardMeta[]) {
       .save(path.resolve(`${deckName}.apkg`))
       .then(() => {
         res();
+        return;
       })
       .catch(err => rej(err.stack || err));
   });

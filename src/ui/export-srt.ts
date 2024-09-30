@@ -27,10 +27,10 @@ export function exportSrt(subtitleData: SubtitleBlock[], subtitleIndex: number) 
 }
 
 function toSrtTime(seconds: number): string {
-    const onlyMiliseconds = Math.floor((seconds - Math.floor(seconds)) * 1000);
-    const onlySeconds = Math.floor(seconds) % 60;
-    const onlyMinutes = Math.floor(seconds / 60) % 60;
-    const onlyHours = Math.floor(seconds / 3600);
+    const onlyMiliseconds = String(Math.floor((seconds - Math.floor(seconds)) * 1000)).padEnd(3, '0');
+    const onlySeconds = String(Math.floor(seconds) % 60).padStart(2, '0');
+    const onlyMinutes = String(Math.floor(seconds / 60) % 60).padStart(2, '0');
+    const onlyHours = String(Math.floor(seconds / 3600)).padStart(2, '0');
     return `${onlyHours}:${onlyMinutes}:${onlySeconds},${onlyMiliseconds}`;
 }
 

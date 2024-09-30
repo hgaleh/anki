@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
 import { SubtitleBlock } from '../share/subtitle-block';
-import './style.css';
+import style from './ui.module.scss';
 
 import React, { useCallback, useEffect, useReducer, useRef } from 'react';
 import { initialUiState, uiActionType, uiReducer } from './ui.reducer';
@@ -18,7 +18,7 @@ function App() {
     if (videoElement.current && state.subtitleData && state.subtitleData.length > 0) {
       videoElement.current.currentTime = state.subtitleData[state.currentIndex].startMargin;
     }
-  }, [state.currentIndex, state.subtitleData]);
+  }, [state.currentIndex]);
 
   const onPrevious = () => {
     dispatch({
@@ -49,7 +49,8 @@ function App() {
       })
     });
 
-    document.body.addEventListener('keydown', (e) => {
+    const keydownHandler = (e: any) => {
+      e.stopPropagation();
       e.preventDefault();
       switch (e.code) {
         case 'ArrowRight':
@@ -69,17 +70,18 @@ function App() {
           break;
         default:
       }
-    })
-  }, [dispatch]);
-
-  const onTimeToUpdate = () => {
-    if (!videoElement.current) {
-      return;
     }
+    document.body.addEventListener('keydown', keydownHandler);
 
+    return () => {
+      document.body.removeEventListener('keydown', keydownHandler);
+    }
+  }, []);
+
+  const onTimeToUpdate = (e: any) => {
     dispatch({
       type: uiActionType.timeToUpdate,
-      payload: videoElement.current.currentTime
+      payload: e.target.currentTime
     });
   }
 
@@ -94,26 +96,57 @@ function App() {
     }
   }, [state.isPlaying]);
 
-  const onExport = useCallback(() => {
-    exportSrt(state.subtitleData, 0);
+  const onExport = useCallback((subtitleIndex: number) => () => {
+    exportSrt(state.subtitleData as SubtitleBlock[], subtitleIndex);
   }, [state.subtitleData])
+
+  const onSubtitleUpdate = useCallback((subtitleIndex: number) => (e: any) => {
+    dispatch({
+      type: uiActionType.updateSubtitleText,
+      payload: {
+        index: subtitleIndex,
+        text: e.target.value
+      }
+    });
+  }, [state.currentIndex]);
+
+  const stopPropoagation = useCallback((e: any) => {
+    e.stopPropagation();
+  }, []);
+
+  const preventDefault = useCallback((e: any) => {
+    e.preventDefault();
+  }, []);
+
+  const addNewSubtitle = useCallback(() => {
+    dispatch({
+      type: uiActionType.addNewSubtitle
+    })
+  }, []);
 
   return (
     <>
-      <video className="video" ref={videoElement} onTimeUpdate={onTimeToUpdate}>
+      <video className={style.video} ref={videoElement} onTimeUpdate={onTimeToUpdate}>
         <source src="/video" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
-      <div className="controls">
-        <Progressbar subtitleData={state.subtitleData} className='progressBar' selectedIndex={state.currentIndex} />
-        <div className="buttons">
-          <button title='Left' tabIndex={-1} onClick={onPrevious}>&lt;</button>
-          <button title='Space' tabIndex={-1} onClick={onPlay}>{state.isPlaying ? 'Stop' : 'Play'} ({state.currentIndex})</button>
-          <button title='Right' tabIndex={-1} onClick={onNext}>&gt;</button>
-          <button tabIndex={-1} onClick={onExport}>Export</button>
+      <div className={style.controls}>
+        <Progressbar subtitleData={state.subtitleData as SubtitleBlock[]} className={style.progressBar} selectedIndex={state.currentIndex} />
+        <div className={style.buttons} onFocus={preventDefault}>
+          <button title='Left' onClick={onPrevious}>&lt;</button>
+          <button title='Space' onClick={onPlay}>{state.isPlaying ? 'Stop' : 'Play'} ({state.currentIndex})</button>
+          <button title='Right' onClick={onNext}>&gt;</button>
         </div>
-        <div className="subtitles">
-          {state.subtitleData && state.subtitleData[state.currentIndex].text.map((eachSub: any, i: any) => <textarea key={`${state.currentIndex}-${i}`}>{eachSub}</textarea>)}
+        <div className={style.subtitles} onKeyDown={stopPropoagation}>
+          {state.subtitleData && state.subtitleData[state.currentIndex].text.map((eachSub: any, i: any) => {
+            return (
+              <div className={style.subtitle} key={`${state.currentIndex}-${i}`}>
+                <textarea value={eachSub} onChange={onSubtitleUpdate(i)} />
+                <button tabIndex={-1} onClick={onExport(i)}>Export</button>
+              </div>
+            )
+          })}
+          <button onClick={addNewSubtitle} className={style.addSubtitle}>Add new</button>
         </div>
       </div>
     </>

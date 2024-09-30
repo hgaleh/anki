@@ -1,0 +1,24 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    overflow: hidden;
+    background-color: lightgray;
+
+    & > .block {
+        flex-shrink: 0;
+        height: 100%;
+
+        &.passed {
+            background-color: red;
+
+            &.last {
+                opacity: 0.5;
+            }
+        }
+
+        &:last-child {
+            flex-grow: 1;
+        }
+    }
+}

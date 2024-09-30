@@ -7,7 +7,7 @@ const { MakeExecutablePlugin } = require('./plugin/make-executable-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const cli = {
     entry: {
@@ -34,10 +34,6 @@ const cli = {
                     }
                 },
                 exclude: ['/node_modules/'],
-            },
-            {
-                test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
-                type: 'asset',
             }
         ],
     },
@@ -46,7 +42,7 @@ const cli = {
     },
     externals: [
         nodeExternals({
-            importType: function(moduleName) {
+            importType: function (moduleName) {
                 return moduleName === 'srt-parser-2' ? `module srt-parser-2` : `commonjs ${moduleName}`
             }
         })
@@ -104,17 +100,22 @@ const ui = {
                 type: 'asset',
             },
             {
-                test: /\.css$/i,
+                test: /\.module\.(sa|sc|c)ss$/,
                 use: [
-                    'style-loader',
+                    MiniCssExtractPlugin.loader,
                     {
                         loader: 'css-loader',
                         options: {
-                            importLoaders: 1,
-                        },
-                    }
-                ],
-            },
+                            modules: {
+                                localIdentName: '[hash:base64:5]_[local]'
+                            },
+                            esModule: false
+                        }
+                    },
+                    'postcss-loader',
+                    'sass-loader'
+                ]
+            }
         ],
     },
     resolve: {
@@ -124,13 +125,17 @@ const ui = {
         new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
             filename: 'index.html',
-            chunks: [ 'ui' ],
-            template: './src/ui/index.html',    
-        })
+            chunks: ['ui'],
+            template: './src/ui/index.html',
+        }),
+        new MiniCssExtractPlugin({
+            filename: '[name].css', // Name of the output CSS file
+            chunkFilename: '[id].css',
+        }),
     ]
 }
 
-module.exports =  () => {
+module.exports = () => {
     if (isProduction) {
         cli.mode = 'production';
         ui.mode = 'production';
@@ -140,5 +145,5 @@ module.exports =  () => {
         cli.mode = 'development';
         cli.devtool = 'source-map';
     }
-    return [ ui, cli ];
+    return [ui, cli];
 };
