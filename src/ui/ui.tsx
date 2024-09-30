@@ -7,6 +7,12 @@ import React, { useCallback, useEffect, useReducer, useRef } from 'react';
 import { initialUiState, uiActionType, uiReducer } from './ui.reducer';
 import { Progressbar } from './Progressbar';
 import { exportSrt } from './export-srt';
+import { FaPlay } from 'react-icons/fa6';
+import { FaStop } from 'react-icons/fa6';
+import { BsFillRewindFill } from 'react-icons/bs';
+import { FaForward } from 'react-icons/fa6';
+import { PiExportFill } from 'react-icons/pi';
+import { IoMdAdd } from 'react-icons/io';
 
 function App() {
 
@@ -133,20 +139,20 @@ function App() {
       <div className={style.controls}>
         <Progressbar subtitleData={state.subtitleData as SubtitleBlock[]} className={style.progressBar} selectedIndex={state.currentIndex} />
         <div className={style.buttons} onFocus={preventDefault}>
-          <button title='Left' onClick={onPrevious}>&lt;</button>
-          <button title='Space' onClick={onPlay}>{state.isPlaying ? 'Stop' : 'Play'} ({state.currentIndex})</button>
-          <button title='Right' onClick={onNext}>&gt;</button>
+          <button title='Left' onClick={onPrevious}><BsFillRewindFill color='white' /></button>
+          <button title='Space' onClick={onPlay}>{state.isPlaying ? <FaStop color='white' /> : <FaPlay color='white' />}</button>
+          <button title='Right' onClick={onNext}><FaForward color='white' /></button>
         </div>
         <div className={style.subtitles} onKeyDown={stopPropoagation}>
           {state.subtitleData && state.subtitleData[state.currentIndex].text.map((eachSub: any, i: any) => {
             return (
               <div className={style.subtitle} key={`${state.currentIndex}-${i}`}>
                 <textarea value={eachSub} onChange={onSubtitleUpdate(i)} />
-                <button tabIndex={-1} onClick={onExport(i)}>Export</button>
+                <button tabIndex={-1} onClick={onExport(i)}><PiExportFill size={30} color='white' /></button>
               </div>
             )
           })}
-          <button onClick={addNewSubtitle} className={style.addSubtitle}>Add new</button>
+          <button onClick={addNewSubtitle} className={style.addSubtitle}><IoMdAdd size={25} /></button>
         </div>
       </div>
     </>

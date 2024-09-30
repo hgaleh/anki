@@ -3,7 +3,7 @@
     flex-direction: row;
     justify-content: flex-start;
     overflow: hidden;
-    background-color: lightgray;
+    background-color: #4f4856;
 
     & > .block {
         flex-shrink: 0;
@@ -13,7 +13,7 @@
             background-color: red;
 
             &.last {
-                opacity: 0.5;
+                opacity: 0.4;
             }
         }
 
