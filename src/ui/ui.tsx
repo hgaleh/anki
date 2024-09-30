@@ -13,6 +13,7 @@ import { BsFillRewindFill } from 'react-icons/bs';
 import { FaForward } from 'react-icons/fa6';
 import { PiExportFill } from 'react-icons/pi';
 import { IoMdAdd } from 'react-icons/io';
+import { MdSubtitles } from "react-icons/md";
 
 function App() {
 
@@ -74,6 +75,11 @@ function App() {
             type: uiActionType.togglePlay
           });
           break;
+        case 'KeyV':
+          dispatch({
+            type: uiActionType.toggleSubtitle
+          });
+          break;
         default:
       }
     }
@@ -130,6 +136,12 @@ function App() {
     })
   }, []);
 
+  const toggleSubtitle = useCallback(() => {
+    dispatch({
+      type: uiActionType.toggleSubtitle
+    })
+  }, [])
+
   return (
     <>
       <div className={style.viewport}>
@@ -137,7 +149,7 @@ function App() {
           <source src="/video" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
-        <div className={style.subtitles} onKeyDown={stopPropoagation}>
+        {state.showSubtitle && <div className={style.subtitles} onKeyDown={stopPropoagation}>
           {state.subtitleData && state.subtitleData[state.currentIndex].text.map((eachSub: any, i: any) => {
             return (
               <div className={style.subtitle} key={`${state.currentIndex}-${i}`}>
@@ -147,11 +159,12 @@ function App() {
             )
           })}
           <button onClick={addNewSubtitle} className={style.addSubtitle}><IoMdAdd size={25} /></button>
-        </div>
+        </div>}
         <Progressbar subtitleData={state.subtitleData as SubtitleBlock[]} className={style.progressBar} selectedIndex={state.currentIndex} />
         <div className={style.controls}>
           <div className={style.buttons} onFocus={preventDefault}>
             <button title='Left' onClick={onPrevious}><BsFillRewindFill color='white' /></button>
+            <button title='V' onClick={toggleSubtitle}><MdSubtitles color='white' /></button>
             <button title='Space' onClick={onPlay}>{state.isPlaying ? <FaStop color='white' /> : <FaPlay color='white' />}</button>
             <button title='Right' onClick={onNext}><FaForward color='white' /></button>
           </div>

@@ -4,12 +4,14 @@ interface StateType {
     isPlaying: boolean;
     currentIndex: number;
     subtitleData: SubtitleBlock[] | null;
+    showSubtitle: boolean;
 }
 
 export const initialUiState: StateType = {
     currentIndex: 0,
     isPlaying: false,
     subtitleData: null,
+    showSubtitle: true
 }
   
   export function uiReducer(state: StateType, action: any) {
@@ -75,6 +77,10 @@ export const initialUiState: StateType = {
           });
           return Object.assign({}, state, { subtitleData: newSubtitleData });
         }
+      case uiActionType.toggleSubtitle:
+        {
+          return Object.assign({}, state, { showSubtitle: !state.showSubtitle })
+        }
       default:
         return state;
     }
@@ -87,5 +93,6 @@ export const initialUiState: StateType = {
     timeToUpdate = 'timeToUpdate',
     togglePlay = 'togglePlay',
     updateSubtitleText = 'updateSubtitleText',
-    addNewSubtitle = 'addNewSubtitle'
+    addNewSubtitle = 'addNewSubtitle',
+    toggleSubtitle = 'toggleSubtitle'
   }
