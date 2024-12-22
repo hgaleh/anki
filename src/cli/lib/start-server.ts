@@ -1,6 +1,7 @@
 import express from 'express';
 import { SubtitleBlock } from '../../share/subtitle-block';
 import path from 'path';
+import { hostname } from 'os';
 
 const app = express();
 const port = 8080;
@@ -18,6 +19,6 @@ export function startServer(reducedTimeAndText: SubtitleBlock[], prefixedInputFi
     });
 
     app.listen(port, '0.0.0.0', () => {
-        console.log(`server running on port http://localhost:${port}`);
+        console.log(`server running on port http://${hostname}:${port}`);
     })
 }
